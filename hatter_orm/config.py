@@ -9,3 +9,5 @@ class Config:
         'foreign_key': 'PRAGMA foreign_keys = "1";\n',
         'auto_vacuum': 'PRAGMA auto_vacuum = 0;',
     }
+    JOIN_TYPES = ['LEFT', 'INNER', 'RIGHT', 'FULL', ]
+    DEFAULT_JOIN = 'LEFT'
