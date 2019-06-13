@@ -100,7 +100,7 @@ def main():
     # Example of update
     logging.info('---------------------')
     logging.info('Basic query for update')
-    item = Item.session(db).update(title='Nokia 3310').filter_by(title='iPhone 7').all()
+    Item.session(db).update(title='Nokia 3310').filter_by(title='iPhone 7').all()
     item = Item.session(db).query(['items.id', 'items.title', 'items.price', 'categories.title',
                                    'producers.title']).foreign_key().all()
     logging.info(item.serialize_json())  # Log serialize to json
