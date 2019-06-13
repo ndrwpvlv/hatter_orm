@@ -58,12 +58,29 @@ Item.session(db).query(['columns_names', ]).filter_by(id=1).order_by('id').forei
 ```
 Update query:
 ```
-Item.session(db).update(title='TITLE').filter_by(title='NEW TITLE').all()
+Item.session(db).update(title='NEW TITLE').filter_by(title='TITLE').all()
 ```
 Delete query:
 ```
 Item.session(db).delete().filter_by(id=1).all()
 ```
+###Query commit:
+
+Every query should be finished with .exec(), .all(), or .first() tail.
+Formats of tails:
+```
+.exec(limit: int = 1, offset: int = 0)
+```
+```
+.all(offset: int = 0)
+``` 
+```
+.first()
+```
+**limit** variable can be use to set number of rows to return on commit. 
+
+**offset** is rows offset.  
+
 ## Tables creation and deletion
 Delete single table
 ```
