@@ -158,7 +158,7 @@ class Model(metaclass=OrderedClass):
     @classmethod
     def exec(cls, limit: int = 1, offset: int = 0):
         """
-        Concatenate request from blocks to single string, add it and commit.
+        Concatenate the request from blocks to single string, add it and commit.
         It has tow options: limit and offset.
         Returned response is copied to cls.__response__. After commit cls.__request_constructor__ become blank
         :param limit: count of rows in response from db
