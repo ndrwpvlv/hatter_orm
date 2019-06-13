@@ -10,10 +10,11 @@ class Database:
     def __init__(self, name: str = None, path: str = None):
         self.name = name or 'hatter.db'
         self.path = os.path.join(path or os.getcwd(), self.name)
+
         self.connection = sqlite3.connect(self.path)
         self.cursor = self.connection.cursor()
-        logging.info("\nConnection open")
-        self.request = None
+        logging.info("Connection open")
+        self.request = []
         self.commit_script(' '.join([Config.PRAGMA_SCRIPT[key] for key in Config.PRAGMA_SCRIPT]))
 
     def __enter__(self):
@@ -46,7 +47,7 @@ class Database:
     def rollback(self):
         pass
 
-    def add(self, request: str or object):
+    def add(self, request):
         row = request if isinstance(request, str) else request()
         if self.request:
             self.request.append(row)
