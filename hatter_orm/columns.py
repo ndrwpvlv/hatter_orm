@@ -17,7 +17,7 @@ class Column:
             self.constraints, self.constraints_values) if value])
 
     @staticmethod
-    def keyword_format(kw, value):
+    def keyword_format(kw: str, value: any) -> str:
         if kw == 'default':
             return 'DEFAULT {}'.format(value)
         elif kw in ['type', 'on_delete', 'on_update']:
