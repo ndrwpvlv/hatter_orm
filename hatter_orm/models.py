@@ -23,7 +23,7 @@ class Model(metaclass=OrderedClass):
     @classmethod
     def table_name(cls):
         if not cls.__tablename__:
-            cls.__tablename__ = '{}'.format(cls.__name__.lower())
+            cls.__tablename__ = cls.__name__.lower()
         return cls.__tablename__
 
     @classmethod
@@ -32,25 +32,28 @@ class Model(metaclass=OrderedClass):
         Get columns from Class
         :return: tuple((column_name_1, (kw1, kw2, ...)), (column_name_2, (kw1, kw2, ...)), ...)
         """
-        return tuple([tuple([name, getattr(cls, name).keywords()]) for name in cls.columns_names()])
+        return tuple((name, getattr(cls, name).keywords()) for name in cls.object_variables_names(cls))
 
     def fields(self) -> dict:
         """
         Get fields of Model instance with values
         :return: Ordered dict with values
         """
-        names = tuple([name for name in self.__dict_ordered__ if
-                       not any([callable(getattr(self, name)), name.startswith('__'), name.endswith('__')])])
-        return OrderedDict([(name, getattr(self, name)) for name in names])
+        return OrderedDict([(name, getattr(self, name)) for name in self.object_variables_names(self)])
 
-    @classmethod
-    def columns_names(cls) -> list:
+    @staticmethod
+    def is_magic_or_callable(obj, name: str) -> bool:
         """
-        Get column names of Model instance
-        :return: list with columns names
+        check if variable is callable or magic
+        :param obj: self, cls or any other object
+        :param name:
+        :return:
         """
-        return [name for name in cls.__dict_ordered__ if
-                not any([callable(getattr(cls, name)), name.startswith('__'), name.endswith('__')])]
+        return any([callable(getattr(obj, name)), name.startswith('__'), name.endswith('__')])
+
+    @staticmethod
+    def object_variables_names(obj):
+        return [name for name in obj.__dict_ordered__ if not obj.is_magic_or_callable(obj, name)]
 
     @classmethod
     def create_table(cls):
@@ -156,7 +159,7 @@ class Model(metaclass=OrderedClass):
         return cls
 
     @classmethod
-    def exec(cls, limit: int = 1, offset: int = 0):
+    def get(cls, limit: int = 1, offset: int = 0):
         """
         Concatenate the request from blocks to single string, add it and commit.
         It has tow options: limit and offset.
@@ -180,19 +183,19 @@ class Model(metaclass=OrderedClass):
     @classmethod
     def all(cls, offset: int = 0):
         """
-        Get all rows wrapper for .exec()
-        :param offset: offset variable for .exec()
+        Get all rows wrapper for .get()
+        :param offset: offset variable for .get()
         :return:
         """
-        return cls.exec(limit=Config.SQL_RESPONSE_LIMIT, offset=offset)
+        return cls.get(limit=Config.SQL_RESPONSE_LIMIT, offset=offset)
 
     @classmethod
     def first(cls):
         """
-        Get first row wrapper for .exec()
+        Get first row wrapper for .get()
         :return:
         """
-        return cls.exec(limit=1, offset=0)
+        return cls.get(limit=1, offset=0)
 
     @classmethod
     def serialize(cls) -> dict:
@@ -201,7 +204,7 @@ class Model(metaclass=OrderedClass):
         :return: response dict
         """
         return {cls.__tablename__: [OrderedDict([(key, value) for key, value in zip(
-            cls.__columns_query__ or cls.columns_names(), item)]) for item in cls.__response__]}
+            cls.__columns_query__ or cls.object_variables_names(cls), item)]) for item in cls.__response__]}
 
     @classmethod
     def serialize_json(cls) -> json:
