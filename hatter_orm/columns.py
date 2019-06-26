@@ -1,20 +1,18 @@
 class Column:
     def __init__(self, field_type, **kwargs):
-        self.constraints = tuple(
-            ['type', 'not_null', 'default', 'primary_key', 'autoincrement', 'unique', 'foreign_key', ])
-        self.constraints_values = tuple([
+        self.constraints = tuple(['type', 'not_null', 'default', 'primary_key', 'autoincrement', 'unique', 'foreign_key', ])
+        self.constraints_values = (
             field_type().get_type(),
-            True if kwargs.get('not_null') else False,
-            kwargs.get('default') or None,
-            True if kwargs.get('primary_key') else False,
-            True if kwargs.get('autoincrement') else False,
-            True if kwargs.get('unique') else False,
-            kwargs.get('foreign_key') or None,
-        ])
+            kwargs.get('not_null', False),
+            kwargs.get('default'),
+            kwargs.get('primary_key', False),
+            kwargs.get('autoincrement', False),
+            kwargs.get('unique', False),
+            kwargs.get('foreign_key'),
+        )
 
     def keywords(self):
-        return tuple([tuple([kw, self.keyword_format(kw, value)]) for kw, value in zip(
-            self.constraints, self.constraints_values) if value])
+        return tuple((kw, self.keyword_format(kw, value)) for kw, value in zip(self.constraints, self.constraints_values) if value)
 
     @staticmethod
     def keyword_format(kw: str, value: any) -> str:

@@ -54,7 +54,7 @@ db.close()
 Select query based on query "constructor":
 ```
 Item.session(db).query(['columns_names', ]).filter_by(id=1).order_by('id').foreign_key().all()
-".all()" can be replaced with ".first()" or ".exec()"
+".all()" can be replaced with ".first()" or ".get()"
 ```
 Update query:
 ```
@@ -66,10 +66,10 @@ Item.session(db).delete().filter_by(id=1).all()
 ```
 ###Query commit:
 
-Every query should be finished with .exec(), .all(), or .first() tail.
+Every query should be finished with .get(), .all(), or .first() tail.
 Formats of tails:
 ```
-.exec(limit: int = 1, offset: int = 0)
+.get(limit: int = 1, offset: int = 0)
 ```
 ```
 .all(offset: int = 0)

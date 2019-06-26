@@ -1,34 +1,30 @@
 class Field:
     def __init__(self):
-        self.type = None
+        self.name = None
 
     def get_type(self):
-        return self.type
+        return self.name.upper()
 
 
 class IntegerField(Field):
     def __init__(self):
         super(IntegerField, self).__init__()
-        __name__ = 'Integer'
-        self.type = __name__.upper()
+        self.name = 'Integer'
 
 
 class RealField(Field):
     def __init__(self):
         super(RealField, self).__init__()
-        __name__ = 'Real'
-        self.type = __name__.upper()
+        self.name = 'Real'
 
 
 class TextField(Field):
     def __init__(self):
         super(TextField, self).__init__()
-        __name__ = 'Text'
-        self.type = __name__.upper()
+        self.name = 'Text'
 
 
 class BlobField(Field):
     def __init__(self):
         super(BlobField, self).__init__()
-        __name__ = 'Blob'
-        self.type = __name__.upper()
+        self.name = 'Blob'
